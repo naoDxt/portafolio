@@ -57,6 +57,7 @@
   <div class="container py-4">
     <h1>Ecuaciones de segundo grado (C++)</h1>
     <p>Archivo: <strong>EcuacionesSegundoGrado.cpp</strong></p>
+    <p>Programa en C++ que resuelve ecuaciones de segundo grado.</p>
 
     <pre><code>
       #include &lt;iostream&gt;
@@ -111,6 +112,10 @@
 
     <hr>
     <h5>Probar con valores propios</h5>
+    <p>Ecuacion cuadratica (ax^2 + bx + c = 0)</p>
+    <p>Este codigo tiene <b>3 valores de entrada (a, b, c)</b></p>
+    <p>Ejemplo: x^2 - 8x + 12 = 0</p>
+    <p>Ejemplo de valores de entrada: [1] [-8] [12]</p>
 
     <!-- Inputs dinámicos -->
     <div id="stdinInputs" class="row g-2 mb-2"></div>
@@ -118,17 +123,6 @@
     <div class="mb-2">
       <button id="addInputBtn" class="btn btn-outline-secondary btn-sm">Agregar input</button>
       <button id="clearInputsBtn" class="btn btn-outline-danger btn-sm ms-2">Limpiar</button>
-      <button id="fill3Btn" class="btn btn-outline-info btn-sm ms-2">Agregar 3 (a,b,c)</button>
-    </div>
-
-    <div class="mb-2">
-      <label class="form-label">O pega la entrada completa (stdin)</label>
-      <textarea id="stdinTextarea" class="form-control" rows="3" placeholder="Ej: 1\n-3\n2"></textarea>
-    </div>
-
-    <div class="mb-2">
-      <label class="form-label">Language ID (opcional, por defecto C++ = 54)</label>
-      <input id="languageId" class="form-control" type="number" value="54" />
     </div>
 
     <div class="mb-2">
@@ -149,7 +143,6 @@
       const inputsContainer = document.getElementById('stdinInputs');
       document.getElementById('addInputBtn').addEventListener('click', () => addInput(''));
       document.getElementById('clearInputsBtn').addEventListener('click', () => inputsContainer.innerHTML = '');
-      document.getElementById('fill3Btn').addEventListener('click', () => { inputsContainer.innerHTML=''; addInput(); addInput(); addInput(); });
 
       function addInput(value='') {
         const div = document.createElement('div');
@@ -158,7 +151,7 @@
         inputsContainer.appendChild(div);
       }
 
-      // la función que decodifica base64 de Judge0
+      // La función que decodifica base64 de Judge0
       function b64ToStr(b64){ return b64 ? decodeURIComponent(escape(atob(b64))) : ''; }
 
       document.getElementById('runBtn').addEventListener('click', async () => {
@@ -174,16 +167,11 @@
 
           // construir stdin
           let stdin = '';
-          const textareaVal = document.getElementById('stdinTextarea').value.trim();
-          if (textareaVal) {
-            stdin = textareaVal + '\n';
-          } else {
-            const fields = Array.from(document.querySelectorAll('.stdin-field')).map(i => i.value.trim()).filter(x => x !== '');
-            if (fields.length > 0) stdin = fields.join('\n') + '\n';
-            else stdin = '';
-          }
+          const fields = Array.from(document.querySelectorAll('.stdin-field')).map(i => i.value.trim()).filter(x => x !== '');
+          if (fields.length > 0) stdin = fields.join('\n') + '\n';
+          else stdin = '';
 
-          const languageId = parseInt(document.getElementById('languageId').value) || 54;
+          const languageId = 54;
 
           out.textContent = 'Enviando al compilador...';
 
