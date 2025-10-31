@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 1</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { 
+      padding-top: 70px;
+    }
+    footer { 
+      background:#f8f9fa;
+      padding: 1rem 0;
+    }
+    pre { 
+      background:#f8f9fa;
+      padding:1rem;
+      border-radius:.4rem;
+      overflow:auto;
+    }
+    .navbar-custom {
+      background-color: #F0963C;
+    }
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link {
+      color: #fff;
+    }
+    .navbar-custom .nav-link:hover {
+      color: #e6f0ff;
+    }
+  </style>
+</head>
+
+<body data-codefile="/assets/code/Ejercicio1.cpp">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="../index.html">
+      <img src="../assets/img/logoUMG.png" alt="Logo Universidad Mariano Gálvez" width="50" height="50" class="d-inline-block align-text-top me-2">
+      <span><b>Portafolio</b></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+            aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="../index.html#home">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#proyectos">Proyectos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#sobre-mi">Sobre mí</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <h1>Ejercicio 1 (C++)</h1>
+    <p>Archivo: <strong>Ejercicio1.cpp</strong></p>
+    <p>Desarrolle un programa que permita determinar a partir de un número de días, ingresado por pantalla, ¿Cuántos años, meses, semanas y días; constituyen el número de días proporcionado utilizando la estructura Mientras o While, luego haga el mismo programa usando Do-While.</p>
+
+    <pre><code>
+      #include &lt;iostream&gt;
+      using namespace std;
+
+      void usandoWhile(int dias) {
+          int anios = 0, meses = 0, semanas = 0;
+          int d = dias;
+          while (d >= 365) { 
+              anios++; d -= 365;
+          }
+          while (d >= 30) {
+              meses++; d -= 30; 
+          }
+          while (d >= 7) { 
+              semanas++; d -= 7; 
+          }
+          cout << "[while] " << dias << " dias = " << anios << " anios, " << meses << " meses, " 
+              << semanas << " semanas, " << d << " dias\n";
+      }
+
+      void usandoDoWhile(int dias) {
+          int anios = 0, meses = 0, semanas = 0;
+          int d = dias;
+          if (d >= 365) {
+              do { 
+                  anios++; d -= 365; 
+              } while (d >= 365);
+          }
+          if (d >= 30) {
+              do { 
+                  meses++; d -= 30; 
+              } while (d >= 30);
+          }
+          if (d >= 7) {
+              do { 
+                  semanas++; d -= 7; 
+              } while (d >= 7);
+          }
+          cout << "[do-while] " << dias << " dias = " << anios << " anios, " << meses << " meses, " 
+              << semanas << " semanas, " << d << " dias\n";
+      }
+
+      int main() {
+          int dias;
+          cout << "Ingrese numero de dias: ";
+          cin >> dias;
+          usandoWhile(dias);
+          usandoDoWhile(dias);
+          return 0;
+      }
+    </code></pre>
+
+    <hr>
+    <h5>Probar con valores propios</h5>
+    <p>Este codigo tiene <b>1 valor de entrada (días)</b></p>
+    <p>Ejemplo: 525 días</p>
+    <p>Ejemplo de valores de entrada: [525]</p>
+
+    <!-- Inputs dinámicos -->
+    <div id="stdinInputs" class="row g-2 mb-2"></div>
+
+    <div class="mb-2">
+      <button id="addInputBtn" class="btn btn-outline-secondary btn-sm">Agregar input</button>
+      <button id="clearInputsBtn" class="btn btn-outline-danger btn-sm ms-2">Limpiar</button>
+    </div>
+
+    <div class="mb-2">
+      <button id="runBtn" class="btn btn-success">Compilar y ejecutar</button>
+      <span class="ms-2 text-muted">Resultado aparecerá abajo</span>
+    </div>
+
+    <div class="mb-3 mt-3">
+      <label class="form-label">Salida:</label>
+      <pre id="runOutput" style="min-height:120px; background:#212529; color:#e8f8ff; padding:1rem;"></pre>
+    </div>
+
+    <script>
+      // ENDPOINT RELATIVO en Netlify (misma URL del sitio)
+      const RUN_ENDPOINT = '/.netlify/functions/run';
+
+      // UI helpers
+      const inputsContainer = document.getElementById('stdinInputs');
+      document.getElementById('addInputBtn').addEventListener('click', () => addInput(''));
+      document.getElementById('clearInputsBtn').addEventListener('click', () => inputsContainer.innerHTML = '');
+
+      function addInput(value='') {
+        const div = document.createElement('div');
+        div.className = 'col-sm-4';
+        div.innerHTML = `<input class="stdin-field form-control" type="text" value="${value}" placeholder="Valor">`;
+        inputsContainer.appendChild(div);
+      }
+
+      // La función que decodifica base64 de Judge0
+      function b64ToStr(b64){ return b64 ? decodeURIComponent(escape(atob(b64))) : ''; }
+
+      document.getElementById('runBtn').addEventListener('click', async () => {
+        const out = document.getElementById('runOutput');
+        out.textContent = 'Cargando código...';
+
+        try {
+          // obtener la ruta del .cpp desde data-codefile en <body>
+          const codePath = document.body.dataset.codefile;
+          const codeResp = await fetch(codePath);
+          if (!codeResp.ok) throw new Error('No se pudo leer el archivo .cpp: ' + codeResp.status);
+          const codeText = await codeResp.text();
+
+          // construir stdin
+          let stdin = '';
+          const fields = Array.from(document.querySelectorAll('.stdin-field')).map(i => i.value.trim()).filter(x => x !== '');
+          if (fields.length > 0) stdin = fields.join('\n') + '\n';
+          else stdin = '';
+
+          const languageId = 54;
+
+          out.textContent = 'Enviando al compilador...';
+
+          const r = await fetch(RUN_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: codeText, stdin: stdin, language_id: languageId })
+          });
+
+          if (!r.ok) {
+            const text = await r.text();
+            throw new Error('Error en la función: ' + r.status + ' — ' + text);
+          }
+          const data = await r.json();
+
+          let resultado = '';
+          if (data.compile_output) resultado += '=== Errores de compilación ===\n' + b64ToStr(data.compile_output) + '\n\n';
+          if (data.stdout) resultado += '=== Salida (stdout) ===\n' + b64ToStr(data.stdout) + '\n\n';
+          if (data.stderr) resultado += '=== Stderr ===\n' + b64ToStr(data.stderr) + '\n\n';
+          resultado += `Status: ${data.status?.description ?? JSON.stringify(data.status)}`;
+
+          out.textContent = resultado;
+        } catch (err) {
+          out.textContent = 'Error: ' + err.message;
+        }
+      });
+    </script>
+    
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="text-center">
+    <div class="container">
+      <small><a href="https://www.umg.edu.gt/">Universidad Mariano Gálvez</a> — Cesia Yuliza Noemi Ruiz Vicente — Curso: Algoritmos</small>
+    </div>
+  </footer>
+</body>
+</html>
